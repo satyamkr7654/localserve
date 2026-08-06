@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/localserve/backend/administration-analytics/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/localserve/backend/booking-dispatch/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/localserve/backend/case-management/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/localserve/backend/catalog-search/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/localserve/backend/communication/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/localserve/backend/file-management/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/localserve/backend/finance/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/localserve/backend/identity-access/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/localserve/backend/location/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/localserve/backend/people/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/localserve/backend/reputation-growth/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/localserve/backend/shared-kernel/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/localserve/backend/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/localserve/backend/src/main/resources" charset="UTF-8" />
+  </component>
+</project>

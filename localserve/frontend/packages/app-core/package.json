@@ -1,0 +1,21 @@
+{
+  "name": "@localserve/app-core",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "exports": { ".": "./src/index.tsx" },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "2.12.0",
+    "@tanstack/react-query": "5.101.4",
+    "next-themes": "0.4.6",
+    "react": "19.2.8",
+    "react-redux": "9.2.0"
+  },
+  "devDependencies": { "@types/react": "19.2.18", "typescript": "5.9.3" }
+}

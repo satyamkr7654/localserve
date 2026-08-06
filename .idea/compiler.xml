@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="reputation-growth" />
+        <module name="administration-analytics" />
+        <module name="catalog-search" />
+        <module name="booking-dispatch" />
+        <module name="shared-kernel" />
+        <module name="location" />
+        <module name="identity-access" />
+        <module name="communication" />
+        <module name="people" />
+        <module name="file-management" />
+        <module name="finance" />
+        <module name="case-management" />
+      </profile>
+      <profile name="Annotation profile for LocalServe Marketplace" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.6.3/mapstruct-processor-1.6.3.jar" />
+        </processorPath>
+        <module name="application" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="administration-analytics" options="-parameters" />
+      <module name="application" options="-parameters" />
+      <module name="booking-dispatch" options="-parameters" />
+      <module name="case-management" options="-parameters" />
+      <module name="catalog-search" options="-parameters" />
+      <module name="communication" options="-parameters" />
+      <module name="file-management" options="-parameters" />
+      <module name="finance" options="-parameters" />
+      <module name="identity-access" options="-parameters" />
+      <module name="location" options="-parameters" />
+      <module name="people" options="-parameters" />
+      <module name="reputation-growth" options="-parameters" />
+      <module name="shared-kernel" options="-parameters" />
+    </option>
+  </component>
+</project>

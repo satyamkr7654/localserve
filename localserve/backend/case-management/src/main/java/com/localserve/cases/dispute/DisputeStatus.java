@@ -1,0 +1,3 @@
+package com.localserve.cases.dispute;
+
+public enum DisputeStatus { OPEN, EVIDENCE_COLLECTION, UNDER_REVIEW, RESOLVED_REFUND, RESOLVED_PARTIAL_REFUND, RESOLVED_RELEASE }

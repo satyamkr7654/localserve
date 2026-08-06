@@ -1,0 +1,93 @@
+spring:
+  application:
+    name: localserve-api
+    version: ${APP_VERSION:dev}
+  lifecycle:
+    timeout-per-shutdown-phase: ${SHUTDOWN_TIMEOUT:30s}
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
+      auto-index-creation: false
+    redis:
+      url: ${REDIS_URL}
+      timeout: 2s
+      connect-timeout: 2s
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    client-id: localserve-api
+    producer:
+      acks: all
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5
+    consumer:
+      group-id: localserve-api-v1
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.localserve
+    listener:
+      ack-mode: record
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${JWT_ISSUER_URI}
+  threads:
+    virtual:
+      enabled: true
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 20MB
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+  forward-headers-strategy: framework
+  max-http-request-header-size: 32KB
+  error:
+    include-message: never
+    include-stacktrace: never
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never
+  tracing:
+    sampling:
+      probability: ${TRACING_SAMPLE_RATE:0.10}
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+    display-request-duration: true
+  api-docs:
+    path: /v3/api-docs
+logging:
+  structured:
+    format:
+      console: logstash
+  level:
+    root: INFO
+    com.localserve: ${APP_LOG_LEVEL:INFO}
+    org.springframework.security: WARN
+localserve:
+  security:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS}
+    access-token-ttl: ${ACCESS_TOKEN_TTL:PT10M}
+    refresh-token-ttl: ${REFRESH_TOKEN_TTL:P14D}
+    remembered-refresh-token-ttl: ${REMEMBERED_REFRESH_TOKEN_TTL:P60D}
+    refresh-cookie-name: __Host-localserve_refresh
+    secure-cookies: ${SECURE_COOKIES:true}
+  runtime:
+    environment: ${APP_ENVIRONMENT}
+    outbox-batch-size: ${OUTBOX_BATCH_SIZE:100}
+    shutdown-timeout: ${SHUTDOWN_TIMEOUT:PT30S}

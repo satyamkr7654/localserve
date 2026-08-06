@@ -1,0 +1,26 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/localserve?replicaSet=rs0
+    redis:
+      url: redis://localhost:6379
+  kafka:
+    bootstrap-servers: localhost:19092
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8081/realms/localserve
+logging:
+  structured:
+    format:
+      console: logstash
+localserve:
+  security:
+    allowed-origins:
+      - http://localhost:3000
+      - http://localhost:3001
+      - http://localhost:3002
+    secure-cookies: false
+  runtime:
+    environment: local

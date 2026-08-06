@@ -1,0 +1,11 @@
+.env
+**/target/
+.idea/
+.vscode/
+*.iml
+*.log
+.DS_Store
+node_modules/
+coverage/
+playwright-report/
+test-results/

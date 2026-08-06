@@ -1,0 +1,33 @@
+:root {
+  --background: #f6f8f7; --foreground: #12211f; --surface: #ffffff; --surface-subtle: #edf3f1;
+  --muted: #81908d; --muted-foreground: #60706d; --border: #dce6e3;
+  --primary: #087669; --primary-strong: #056157; --primary-foreground: #ffffff; --primary-soft: #dff4ef;
+  --success: #147d4d; --success-soft: #def6e9; --warning: #9a6200; --warning-soft: #fff1cc;
+  --danger: #bd3d45; --danger-soft: #fee7e9; --info: #2766a5; --info-soft: #e5f0fb;
+  color-scheme: light;
+}
+.dark {
+  --background: #0d1514; --foreground: #eaf4f1; --surface: #14201e; --surface-subtle: #1c2a27;
+  --muted: #71807d; --muted-foreground: #a8b6b3; --border: #2b3a37;
+  --primary: #48c9b5; --primary-strong: #6ed8c8; --primary-foreground: #072e29; --primary-soft: #173e38;
+  --success: #6bdaa0; --success-soft: #153a29; --warning: #f1c66a; --warning-soft: #3b2e14;
+  --danger: #ff8e96; --danger-soft: #442126; --info: #83b8ed; --info-soft: #182f46;
+  color-scheme: dark;
+}
+@theme inline {
+  --color-background: var(--background); --color-foreground: var(--foreground); --color-surface: var(--surface);
+  --color-surface-subtle: var(--surface-subtle); --color-muted: var(--muted); --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border); --color-primary: var(--primary); --color-primary-strong: var(--primary-strong);
+  --color-primary-foreground: var(--primary-foreground); --color-primary-soft: var(--primary-soft);
+  --color-success: var(--success); --color-success-soft: var(--success-soft); --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft); --color-danger: var(--danger); --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info); --color-info-soft: var(--info-soft);
+}
+* { border-color: var(--border); }
+html { scroll-behavior: smooth; }
+body { background: var(--background); color: var(--foreground); font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif; text-rendering: optimizeLegibility; }
+button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+.skip-link { position: fixed; left: 1rem; top: -5rem; z-index: 100; border-radius: .75rem; background: var(--primary); color: var(--primary-foreground); padding: .75rem 1rem; font-weight: 800; transition: top .2s; }
+.skip-link:focus { top: 1rem; }
+::selection { background: var(--primary-soft); color: var(--foreground); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }

@@ -1,0 +1,15 @@
+{
+  "name": "@localserve/contracts",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": { "zod": "4.4.3" },
+  "devDependencies": { "typescript": "5.9.3" }
+}

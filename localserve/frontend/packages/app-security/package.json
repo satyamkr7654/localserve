@@ -1,0 +1,5 @@
+{
+  "name":"@localserve/app-security","private":true,"version":"1.0.0","type":"module","exports":{"./proxy":"./src/proxy.ts"},
+  "scripts":{"build":"tsc --noEmit","lint":"eslint src","typecheck":"tsc --noEmit","test":"vitest run"},
+  "dependencies":{"next":"16.3.0"},"devDependencies":{"typescript":"5.9.3","vitest":"4.1.10"}
+}

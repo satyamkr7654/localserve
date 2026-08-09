@@ -163,7 +163,9 @@ public class PublicAuthenticationController {
     }
 
     private static IdentityResponses.RegistrationView registration(AuthenticationService.Registration result) {
-        List<String> nextSteps = result.account().emailVerified ? List.of() : List.of("VERIFY_EMAIL");
+        boolean requiresVerification =
+                result.account().roles.contains("PROVIDER") && !result.account().emailVerified;
+        List<String> nextSteps = requiresVerification ? List.of("VERIFY_EMAIL") : List.of();
         return new IdentityResponses.RegistrationView(IdentityResponses.account(result.account()), nextSteps,
                 result.verificationDelivered());
     }

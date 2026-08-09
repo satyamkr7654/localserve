@@ -20,8 +20,9 @@ import java.time.Duration;
 @Configuration
 public class IdentityConfiguration {
     @Bean BreachedPasswordChecker breachedPasswordChecker(RestClient.Builder builder,
+            @Value("${BREACHED_PASSWORD_CHECK_ENABLED:true}") boolean enabled,
             @Value("${BREACHED_PASSWORD_API_URL:https://api.pwnedpasswords.com/range/}") String baseUrl) {
-        return new KAnonymityBreachedPasswordChecker(builder, baseUrl);
+        return enabled ? new KAnonymityBreachedPasswordChecker(builder, baseUrl) : password -> false;
     }
     @Bean OtpService otpService(OtpChallengeStore store, Clock clock,
                                @Value("${OTP_HMAC_PEPPER}") String pepper) {

@@ -44,8 +44,9 @@ async function validateSession(accessToken: string, role: AppRole) {
       headers: { Authorization: `Bearer ${accessToken}` }, cache: "no-store",
     });
     if (!response.ok) return false;
-    const body = await response.json() as { account?: { roles?: string[] } };
-    return body.account?.roles?.includes(role) ?? false;
+    const body = await response.json() as { roles?: string[]; account?: { roles?: string[] } };
+    const roles = body.account?.roles ?? body.roles;
+    return roles?.includes(role) ?? false;
   } catch {
     return false;
   }

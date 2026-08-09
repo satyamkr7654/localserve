@@ -9,6 +9,7 @@ import java.util.Objects;
 public final class PasswordService {
     private final PasswordEncoder encoder;
     private final BreachedPasswordChecker breachedPasswordChecker;
+    private final String dummyHash;
 
     public PasswordService(BreachedPasswordChecker breachedPasswordChecker) {
         this(Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8(), breachedPasswordChecker);
@@ -17,6 +18,7 @@ public final class PasswordService {
     PasswordService(PasswordEncoder encoder, BreachedPasswordChecker breachedPasswordChecker) {
         this.encoder = Objects.requireNonNull(encoder, "encoder");
         this.breachedPasswordChecker = Objects.requireNonNull(breachedPasswordChecker, "breachedPasswordChecker");
+        this.dummyHash = encoder.encode("localserve-enumeration-safe-dummy-password");
     }
 
     public String hash(char[] password) {
@@ -33,9 +35,8 @@ public final class PasswordService {
 
     public boolean matches(char[] password, String encoded) {
         Objects.requireNonNull(password, "password");
-        Objects.requireNonNull(encoded, "encoded");
         try {
-            return encoder.matches(new String(password), encoded);
+            return encoder.matches(new String(password), encoded == null ? dummyHash : encoded) && encoded != null;
         } finally {
             java.util.Arrays.fill(password, '\0');
         }

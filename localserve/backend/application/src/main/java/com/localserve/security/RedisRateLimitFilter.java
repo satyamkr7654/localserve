@@ -80,7 +80,7 @@ public class RedisRateLimitFilter extends OncePerRequestFilter {
     }
 
     private static Policy policy(String path) {
-        if (path.contains("/auth/otp") || path.contains("/auth/password")) return new Policy("sensitive-auth", 10, 60_000, true);
+        if (path.contains("otp") || path.contains("/auth/password")) return new Policy("sensitive-auth", 10, 60_000, true);
         if (path.contains("/auth/")) return new Policy("auth", 20, 60_000, true);
         return new Policy("api", 300, 60_000, false);
     }

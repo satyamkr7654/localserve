@@ -37,6 +37,14 @@ services:
       interval: 10s
       timeout: 5s
       retries: 20
+  mailpit:
+    image: axllent/mailpit:v1.27
+    ports: ["1025:1025", "8025:8025"]
+    healthcheck:
+      test: ["CMD", "/mailpit", "readyz"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
   api:
     build:
       context: ../..
@@ -46,6 +54,10 @@ services:
       MONGODB_URI: mongodb://mongo:27017/localserve?replicaSet=rs0
       REDIS_URL: redis://redis:6379
       KAFKA_BOOTSTRAP_SERVERS: redpanda:9092
+      SMTP_HOST: mailpit
+      SMTP_PORT: 1025
+      SMTP_AUTH: "false"
+      SMTP_STARTTLS: "false"
     ports: ["8080:8080"]
     depends_on:
       mongo-init:
@@ -53,6 +65,8 @@ services:
       redis:
         condition: service_healthy
       redpanda:
+        condition: service_healthy
+      mailpit:
         condition: service_healthy
     read_only: true
     tmpfs: ["/tmp:rw,noexec,nosuid,size=128m"]

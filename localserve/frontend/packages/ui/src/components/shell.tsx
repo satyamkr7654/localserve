@@ -14,6 +14,7 @@ import {
   Search,
   Settings,
   ShieldCheck,
+  LogOut,
   Sun,
   Users,
   WalletCards,
@@ -23,7 +24,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import { useState, useSyncExternalStore, type PropsWithChildren } from "react";
+import { useEffect, useState, useSyncExternalStore, type PropsWithChildren } from "react";
 import { cn } from "../lib/cn";
 import { Avatar, Button } from "./primitives";
 
@@ -68,6 +69,11 @@ type RoleShellProps = PropsWithChildren<{
 export function RoleShell({ role, person, initials, navigation, children }: RoleShellProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+
+  if (["/login", "/register", "/verify-email", "/reset-password", "/oauth/google/result"]
+    .some((path) => pathname.startsWith(path))) {
+    return <main id="main-content" className="min-h-dvh bg-background text-foreground">{children}</main>;
+  }
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
@@ -143,6 +149,9 @@ export function RoleShell({ role, person, initials, navigation, children }: Role
               <p className="text-xs text-muted-foreground">Secure session</p>
             </div>
           </div>
+          <Button className="mt-3 w-full" variant="ghost" size="sm" onClick={logout}>
+            <LogOut className="size-4" aria-hidden="true" /> Sign out
+          </Button>
         </div>
       </aside>
 
@@ -195,8 +204,26 @@ export function RoleShell({ role, person, initials, navigation, children }: Role
           );
         })}
       </nav>
+      <SessionKeeper />
     </div>
   );
+}
+
+function SessionKeeper() {
+  useEffect(() => {
+    const refresh = async () => {
+      const response = await fetch("/api/auth/refresh", { method: "POST", cache: "no-store" }).catch(() => null);
+      if (response?.status === 401 || response?.status === 403) window.location.replace("/login");
+    };
+    const timer = window.setInterval(refresh, 8 * 60 * 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+  return null;
+}
+
+async function logout() {
+  await fetch("/api/auth/logout", { method: "POST", cache: "no-store" }).catch(() => null);
+  window.location.replace("/login");
 }
 
 function ThemeToggle() {

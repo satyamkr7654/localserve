@@ -26,9 +26,14 @@ public class GlobalExceptionHandler {
     }
 
     private static HttpStatus statusFor(String code) {
-        if (code.equals("ACCESS.DENIED") || code.endsWith(".ACCESS_DENIED")) return HttpStatus.FORBIDDEN;
-        if (code.equals("AUTH.INVALID_CREDENTIALS") || code.equals("WEBHOOK.SIGNATURE_INVALID")) return HttpStatus.UNAUTHORIZED;
+        if (code.equals("ACCESS.DENIED") || code.endsWith(".ACCESS_DENIED")
+                || code.equals("AUTH.CSRF_INVALID") || code.equals("AUTH.ORIGIN_INVALID")) return HttpStatus.FORBIDDEN;
+        if (code.equals("AUTH.INVALID_CREDENTIALS") || code.equals("AUTH.TOKEN_EXPIRED")
+                || code.equals("AUTH.SESSION_REVOKED") || code.equals("AUTH.SESSION_MISMATCH")
+                || code.equals("WEBHOOK.SIGNATURE_INVALID")) return HttpStatus.UNAUTHORIZED;
         if (code.endsWith(".NOT_FOUND")) return HttpStatus.NOT_FOUND;
+        if (code.endsWith(".UNAVAILABLE") || code.endsWith(".NOT_CONFIGURED")) return HttpStatus.SERVICE_UNAVAILABLE;
+        if (code.equals("AUTH.REFRESH_REUSE_DETECTED")) return HttpStatus.UNAUTHORIZED;
         if (code.startsWith("AUTH.OTP_") || code.startsWith("REQUEST.")) return HttpStatus.BAD_REQUEST;
         return HttpStatus.CONFLICT;
     }

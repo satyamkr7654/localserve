@@ -1,22 +1,24 @@
 spring:
+  mongodb:
+    uri: ${MONGODB_URI:mongodb://localhost:27017/localserve?replicaSet=rs0}
   data:
-    mongodb:
-      uri: mongodb://localhost:27017/localserve?replicaSet=rs0
     redis:
-      url: redis://localhost:6379
+      url: ${REDIS_URL:redis://localhost:6379}
   kafka:
-    bootstrap-servers: localhost:19092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:19092}
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8081/realms/localserve
+          issuer-uri: ${JWT_ISSUER_URI:http://localhost:8080}
   mail:
-    host: localhost
-    port: 1025
+    host: ${SMTP_HOST:localhost}
+    port: ${SMTP_PORT:1025}
+    username: ${SMTP_USERNAME:}
+    password: ${SMTP_PASSWORD:}
     properties:
-      mail.smtp.auth: false
-      mail.smtp.starttls.enable: false
+      mail.smtp.auth: ${SMTP_AUTH:false}
+      mail.smtp.starttls.enable: ${SMTP_STARTTLS:false}
 logging:
   structured:
     format:

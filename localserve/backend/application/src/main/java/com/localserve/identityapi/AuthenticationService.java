@@ -118,7 +118,8 @@ public class AuthenticationService {
             throw invalidCredentials();
         }
         requireUsable(account);
-        if ((!admin && normalized.contains("@") && !account.emailVerified)
+        if ((!admin && account.roles.contains("PROVIDER")
+                && normalized.contains("@") && !account.emailVerified)
                 || (!admin && normalized.startsWith("+") && !account.phoneVerified)) {
             persistence.recordActivity(account, null, "PASSWORD_LOGIN", "FAILED", "CONTACT_NOT_VERIFIED",
                     context.approximateRegion(), context.correlationId());

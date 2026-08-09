@@ -80,7 +80,10 @@ export function RegistrationPage({ role }: { role: Exclude<AuthRole, "Admin"> })
     const response = await fetch("/api/auth/register", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }).catch(() => null);
     const result = response ? await response.json().catch(() => ({})) as { detail?: string } : {};
     if (!response?.ok) { setError(result.detail ?? "Registration could not be completed."); setBusy(false); return; }
-    setMessage("Account created. Check your email to verify it before signing in."); setBusy(false);
+    setMessage(role === "Provider"
+      ? "Account created. Check your email to verify it before signing in."
+      : "Account created. You can now sign in. Email verification is optional.");
+    setBusy(false);
   }
   return <AuthFrame role={role} title={`Create your ${role.toLowerCase()} account`}>
     {message ? <div className="rounded-2xl bg-success-soft p-5 text-success"><ShieldCheck className="mb-3 size-7" /><p className="font-bold">{message}</p><Link href="/login" className="mt-4 inline-block font-extrabold underline">Return to sign in</Link></div> : <form className="space-y-4" onSubmit={submit}>

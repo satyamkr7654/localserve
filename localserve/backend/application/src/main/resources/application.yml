@@ -4,9 +4,10 @@ spring:
     version: ${APP_VERSION:dev}
   lifecycle:
     timeout-per-shutdown-phase: ${SHUTDOWN_TIMEOUT:30s}
+  mongodb:
+    uri: ${MONGODB_URI}
   data:
     mongodb:
-      uri: ${MONGODB_URI}
       auto-index-creation: false
     redis:
       url: ${REDIS_URL}

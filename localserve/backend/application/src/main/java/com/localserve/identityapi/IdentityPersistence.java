@@ -49,6 +49,10 @@ public class IdentityPersistence {
         return Optional.ofNullable(mongo.findOne(Query.query(Criteria.where("googleSubject").is(subject)), Account.class));
     }
 
+    public List<Account> findByRole(String role) {
+        return mongo.find(Query.query(Criteria.where("roles").is(role)), Account.class);
+    }
+
     public DeviceSession createSession(PublicId principalId, DeviceInput device, boolean remembered,
                                        String approximateRegion) {
         Instant now = clock.instant();

@@ -3,6 +3,44 @@ import type { AppRole } from "./proxy";
 
 export type AuthAction = "login" | "mfa" | "register" | "refresh" | "logout" | "adopt";
 
+export async function handleRoleApi(request: NextRequest, role: AppRole, segments: string[]) {
+  if (!segments.length || segments.some((segment) => !/^[A-Za-z0-9._~-]+$/.test(segment))) {
+    return NextResponse.json({ code: "REQUEST.NOT_FOUND", detail: "API route was not found" }, { status: 404 });
+  }
+  const accessToken = request.cookies.get("__Host-localserve_access")?.value
+    ?? request.cookies.get("localserve_access")?.value;
+  if (!accessToken) {
+    return NextResponse.json({ code: "AUTH.REQUIRED", detail: "Sign in is required" }, { status: 401 });
+  }
+
+  const origin = process.env.BACKEND_API_ORIGIN ?? "http://localhost:8080";
+  const prefix = role === "CUSTOMER" ? "/api/v1/customer" : role === "PROVIDER" ? "/api/v1/provider" : "/api/v1/admin";
+  const headers = new Headers({ Authorization: `Bearer ${accessToken}` });
+  for (const name of ["content-type", "idempotency-key", "x-correlation-id"]) {
+    const value = request.headers.get(name);
+    if (value) headers.set(name, value);
+  }
+  const method = request.method.toUpperCase();
+  const body = method === "GET" || method === "HEAD" ? undefined : await request.arrayBuffer();
+  try {
+    const init: RequestInit = { method, headers, cache: "no-store", redirect: "manual" };
+    if (body !== undefined) init.body = body;
+    const upstream = await fetch(`${origin}${prefix}/${segments.join("/")}${request.nextUrl.search}`, init);
+    const response = new NextResponse(upstream.body, { status: upstream.status });
+    for (const name of ["content-type", "x-correlation-id", "location", "retry-after"]) {
+      const value = upstream.headers.get(name);
+      if (value) response.headers.set(name, value);
+    }
+    response.headers.set("Cache-Control", "no-store");
+    return response;
+  } catch {
+    return NextResponse.json(
+      { code: "API.SERVICE_UNAVAILABLE", detail: "LocalServe API is temporarily unavailable" },
+      { status: 503, headers: { "Cache-Control": "no-store" } },
+    );
+  }
+}
+
 export async function handleAuth(request: NextRequest, role: AppRole, action: AuthAction) {
   if (action === "adopt") return adopt(request, role);
   const origin = process.env.BACKEND_API_ORIGIN ?? "http://localhost:8080";

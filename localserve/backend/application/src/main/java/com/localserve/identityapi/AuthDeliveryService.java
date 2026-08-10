@@ -74,6 +74,12 @@ public class AuthDeliveryService {
                 "If you requested a password reset, use this single-use link:\n" + recoveryBaseUrl + "?token=" + token);
     }
 
+    public void sendBookingOtp(String email, String bookingId, String purpose, String code, Instant expiresAt) {
+        sendEmail(email, "LocalServe " + purpose + " code",
+                "Booking " + bookingId + "\n" + purpose + " code: " + code
+                        + "\nExpires at: " + expiresAt + "\nNever share this code before the required service step.");
+    }
+
     private void sendEmail(String email, String subject, String body) {
         JavaMailSender sender = mailSender.getIfAvailable();
         if (sender == null) throw unavailable();

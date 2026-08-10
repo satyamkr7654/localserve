@@ -26,7 +26,6 @@ import java.security.NoSuchAlgorithmException;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.Locale;
@@ -479,7 +478,7 @@ public class Phase8BookingService {
             throw new DomainException("AUTH.DELIVERY_UNAVAILABLE", "Customer email is unavailable for OTP delivery");
         }
         delivery.sendBookingOtp(customer.normalizedEmail, bookingId.toString(), purpose,
-                issued.code(), issued.expiresAt());
+                issued.plaintextCode(), issued.expiresAt());
     }
 
     private Phase8Persistence.BookingView requireOwnedView(PublicId customerId, PublicId bookingId) {

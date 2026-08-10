@@ -2,7 +2,11 @@ import { NextRequest } from "next/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { proxy } from "./proxy";
 
-afterEach(() => vi.unstubAllEnvs());
+afterEach(() => {
+  vi.unstubAllEnvs();
+  vi.unstubAllGlobals();
+  vi.restoreAllMocks();
+});
 
 describe("security proxy", () => {
   it("issues a per-request nonce and defensive browser headers", async () => {
@@ -14,6 +18,36 @@ describe("security proxy", () => {
     expect(csp).toContain("frame-ancestors 'none'");
     expect(response.headers.get("X-Content-Type-Options")).toBe("nosniff");
     expect(response.headers.get("Referrer-Policy")).toBe("strict-origin-when-cross-origin");
+  });
+
+  it("accepts the direct account response returned for customer sessions", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(
+      JSON.stringify({ roles: ["CUSTOMER"] }),
+      { status: 200, headers: { "Content-Type": "application/json" } },
+    )));
+    const request = new NextRequest("http://localhost:3000/", {
+      headers: { cookie: "localserve_access=test-access-token" },
+    });
+
+    const response = await proxy(request, "CUSTOMER");
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("location")).toBeNull();
+  });
+
+  it("accepts the wrapped account response returned for admin sessions", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(
+      JSON.stringify({ account: { roles: ["ADMIN"] } }),
+      { status: 200, headers: { "Content-Type": "application/json" } },
+    )));
+    const request = new NextRequest("http://localhost:3002/", {
+      headers: { cookie: "localserve_access=test-access-token" },
+    });
+
+    const response = await proxy(request, "ADMIN");
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("location")).toBeNull();
   });
 
   it("limits powerful browser features", async () => {

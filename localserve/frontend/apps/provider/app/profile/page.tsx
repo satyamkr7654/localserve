@@ -1,5 +1,8 @@
-import { BadgeCheck, Building2, ChevronRight, FileCheck2, Landmark, ShieldCheck, Wrench } from "lucide-react";
-import { Avatar, Badge, Card, Progress, SectionHeading } from "@localserve/ui";
+import { SectionHeading } from "@localserve/ui";
+import { ProviderOnboarding } from "./provider-onboarding";
+
 export const metadata = { title: "Provider profile" };
-const rows=[{label:"Identity verification",detail:"Aadhaar and PAN verified",icon:ShieldCheck},{label:"Skills & services",detail:"AC repair · 4 approved skills",icon:Wrench},{label:"Certificates",detail:"3 active · 1 expires in 42 days",icon:FileCheck2},{label:"Payout account",detail:"HDFC Bank · ending 4821",icon:Landmark},{label:"Business details",detail:"Individual professional",icon:Building2}];
-export default function ProfilePage(){return <div className="space-y-6"><SectionHeading eyebrow="Professional profile" title="Profile and verification"/><Card className="p-6"><div className="flex flex-wrap items-center gap-5"><Avatar initials="RK" size="lg"/><div className="flex-1"><div className="flex items-center gap-2"><h2 className="text-xl font-black">Ravi Kumar</h2><BadgeCheck className="size-5 text-primary"/></div><p className="mt-1 text-sm text-muted-foreground">Approved provider · Noida service zone</p></div><Badge tone="positive">Approved</Badge></div><div className="mt-6"><Progress value={92} label="Profile strength"/></div></Card><Card className="divide-y divide-border">{rows.map(({label,detail,icon:Icon})=><button key={label} className="flex min-h-20 w-full items-center gap-4 px-5 text-left hover:bg-surface-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"><span className="grid size-10 place-items-center rounded-2xl bg-primary-soft text-primary"><Icon className="size-5"/></span><span className="flex-1"><strong className="block text-sm">{label}</strong><span className="mt-1 block text-xs text-muted-foreground">{detail}</span></span><ChevronRight className="size-4 text-muted"/></button>)}</Card></div>}
+
+export default function ProfilePage() {
+  return <div className="space-y-6"><SectionHeading eyebrow="Professional profile" title="Onboarding and availability" description="Submit services and zone, wait for admin approval, then go online." /><ProviderOnboarding /></div>;
+}

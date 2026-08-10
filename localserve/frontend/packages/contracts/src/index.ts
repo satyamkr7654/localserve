@@ -61,3 +61,40 @@ export type AdminDashboard = z.infer<typeof adminDashboardSchema>;
 
 export type ApiEnvelope<T> = { data: T; meta: { correlationId: string; timestamp: string; nextCursor?: string } };
 export type ApiProblem = { type: string; title: string; status: number; code: string; detail: string; correlationId?: string };
+
+export type Phase8Service = {
+  id: string; code: string; name: string; baseAmountMinor: number; currency: string;
+};
+
+export type Phase8Quote = {
+  id: string; serviceId: string; serviceCode: string; serviceName: string;
+  bookingType: "INSTANT" | "SCHEDULED" | "EMERGENCY"; serviceZoneId: string;
+  amountMinor: number; currency: string; expiresAt: string;
+};
+
+export type Phase8Booking = {
+  id: string; serviceId: string; serviceCode: string; serviceName: string;
+  bookingType: "INSTANT" | "SCHEDULED" | "EMERGENCY"; serviceZoneId: string;
+  address: string; problemDescription: string; expectedAmountMinor: number; currency: string;
+  status: BookingStatus; version: number; selectedProviderId: string | null;
+  selectedProviderName: string | null; createdAt: string; updatedAt: string;
+};
+
+export type Phase8Offer = {
+  id: string; bookingId: string; providerId: string; providerName: string;
+  serviceCode: string; serviceName: string; serviceZoneId: string; problemDescription: string;
+  expectedAmountMinor: number; currency: string; status: string;
+  estimatedAmountMinor: number | null; etaMinutes: number | null; note: string;
+  expiresAt: string; updatedAt: string;
+};
+
+export type Phase8Provider = {
+  id: string; displayName: string; businessDisplayName: string | null;
+  serviceZoneId: string | null; serviceCodes: string[]; onboardingStatus: string;
+  online: boolean; capacity: number; updatedAt: string | null;
+};
+
+export type Phase8Challenge = {
+  challengeId: string; purpose: "BOOKING_START" | "BOOKING_COMPLETION";
+  expiresAt: string; deliveryChannel: string; bookingVersion: number;
+};

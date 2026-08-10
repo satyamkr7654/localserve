@@ -1,6 +1,8 @@
-import { Clock3, MapPin, Navigation, ShieldCheck } from "lucide-react";
-import { Badge, Button, Card, SectionHeading } from "@localserve/ui";
+import { SectionHeading } from "@localserve/ui";
+import { ProviderJobs } from "./provider-jobs";
 
 export const metadata = { title: "Jobs" };
-const jobs = [{id:"LS-64001",service:"AC inspection",area:"Sector 62",time:"Today, 2:15 PM",status:"On the way",tone:"info" as const},{id:"LS-64008",service:"Split AC servicing",area:"Sector 76",time:"Today, 5:00 PM",status:"Upcoming",tone:"warning" as const},{id:"LS-63884",service:"AC gas refill",area:"Sector 50",time:"Today, 11:30 AM",status:"Completed",tone:"positive" as const}];
-export default function JobsPage() { return <div className="space-y-6"><SectionHeading eyebrow="Operations" title="Jobs and requests" description="Only server-authorized booking actions can advance a job status."/><div className="flex gap-2"><Button size="sm">Active</Button><Button size="sm" variant="ghost">Upcoming</Button><Button size="sm" variant="ghost">History</Button></div><div className="grid gap-4">{jobs.map(job => <Card key={job.id} className="grid gap-4 p-5 md:grid-cols-[1fr_auto] md:items-center"><div><div className="flex flex-wrap items-center gap-2"><h2 className="font-black">{job.service}</h2><Badge tone={job.tone}>{job.status}</Badge></div><p className="mt-2 flex flex-wrap gap-4 text-xs text-muted-foreground"><span className="flex items-center gap-1"><MapPin className="size-3.5"/>{job.area}</span><span className="flex items-center gap-1"><Clock3 className="size-3.5"/>{job.time}</span><span>{job.id}</span></p></div><div className="flex gap-2"><Button variant="secondary"><Navigation className="size-4"/>Details</Button>{job.status === "On the way" && <Button><ShieldCheck className="size-4"/>Arrival flow</Button>}</div></Card>)}</div></div>; }
+
+export default function JobsPage() {
+  return <div className="space-y-6"><SectionHeading eyebrow="Operations" title="Live offers and jobs" description="Accept a customer request, travel, verify both OTPs and finish the service." /><ProviderJobs /></div>;
+}

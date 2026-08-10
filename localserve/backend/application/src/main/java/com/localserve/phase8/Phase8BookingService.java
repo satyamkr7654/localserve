@@ -82,6 +82,9 @@ public class Phase8BookingService {
 
     public ProviderView saveOnboarding(PublicId providerId, ProviderCommand command) {
         IdentityPersistence.Account account = requireRole(providerId, "PROVIDER");
+        if (command.serviceCodes() == null) {
+            throw new DomainException("PROVIDER.SKILL_REQUIRED", "Select at least one supported service");
+        }
         Set<String> serviceCodes = command.serviceCodes().stream()
                 .map(this::normalizeServiceCode)
                 .collect(java.util.stream.Collectors.toUnmodifiableSet());
@@ -390,7 +393,10 @@ public class Phase8BookingService {
     public BookingView verifyStartOtp(PublicId providerId, PublicId bookingId, OtpCommand command) {
         Phase8Persistence.BookingView view = requireProviderView(providerId, bookingId);
         Booking booking = requireBooking(bookingId);
-        PublicId challengeId = PublicId.parse(command.challengeId());
+        PublicId challengeId = booking.startOtpChallengeId();
+        if (challengeId == null) {
+            throw new DomainException("AUTH.OTP_INVALID", "Start OTP challenge is unavailable");
+        }
         String subject = otpSubject(bookingId, "BOOKING_START");
         otps.verify(challengeId, subject, com.localserve.identity.otp.OtpPurpose.BOOKING_START,
                 command.code(), booking.version());
@@ -433,7 +439,10 @@ public class Phase8BookingService {
     public BookingView verifyCompletionOtp(PublicId providerId, PublicId bookingId, OtpCommand command) {
         Phase8Persistence.BookingView view = requireProviderView(providerId, bookingId);
         Booking booking = requireBooking(bookingId);
-        PublicId challengeId = PublicId.parse(command.challengeId());
+        PublicId challengeId = booking.completionOtpChallengeId();
+        if (challengeId == null) {
+            throw new DomainException("AUTH.OTP_INVALID", "Completion OTP challenge is unavailable");
+        }
         String subject = otpSubject(bookingId, "BOOKING_COMPLETION");
         otps.verify(challengeId, subject, com.localserve.identity.otp.OtpPurpose.BOOKING_COMPLETION,
                 command.code(), booking.version());
@@ -628,7 +637,7 @@ public class Phase8BookingService {
                             String problemDescription, long expectedAmountMinor, String currency,
                             String status, Long estimatedAmountMinor, Integer etaMinutes,
                             String note, Instant expiresAt, Instant updatedAt) { }
-    public record OtpCommand(String challengeId, String code) { }
+    public record OtpCommand(String code) { }
     public record CompletionCommand(boolean afterEvidenceAcknowledged) { }
     public record ChallengeView(String challengeId, String purpose, Instant expiresAt,
                                 String deliveryChannel, long bookingVersion) { }
